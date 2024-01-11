@@ -19,5 +19,7 @@ daggerfall-unity-1.0.0\Assets\Game\Mods\Context-Sensitive Interaction\Context-Se
 
 # Credit
 JohnDoom for creating the original mod. - https://www.nexusmods.com/daggerfallunity/users/2894988
+
 World Tool Tips mod that was referenced for these edits - https://www.nexusmods.com/daggerfallunity/mods/158
+
 General_101 for edits
