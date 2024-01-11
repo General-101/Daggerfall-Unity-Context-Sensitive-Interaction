@@ -1,0 +1,11 @@
+{
+    "ModTitle": "Context-Sensitive Interaction",
+    "ModVersion": "0.1",
+    "ModAuthor": "John Doom",
+    "DFUnity_Version": "0.13.4",
+    "ModDescription": "Automatically switches to the most appropriate interaction mode.",
+    "GUID": "cc45b943-7c70-467f-a1df-e1d718e13a64",
+    "Files": [
+        "Assets/Game/Mods/Context-Sensitive Interaction/ContextSensitiveInteraction.cs"
+    ]
+}
