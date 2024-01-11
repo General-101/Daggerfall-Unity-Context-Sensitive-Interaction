@@ -1,6 +1,6 @@
 {
     "ModTitle": "Context-Sensitive Interaction",
-    "ModVersion": "0.1",
+    "ModVersion": "0.2",
     "ModAuthor": "John Doom",
     "DFUnity_Version": "0.13.4",
     "ModDescription": "Automatically switches to the most appropriate interaction mode.",

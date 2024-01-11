@@ -4,6 +4,7 @@ using DaggerfallWorkshop.Game.Utility.ModSupport;
 using DaggerfallWorkshop;
 using DaggerfallConnect;
 using System.Reflection;
+using DaggerfallWorkshop.Utility.AssetInjection;
 
 namespace ContextSensitiveInteractionMod
 {
@@ -15,6 +16,7 @@ namespace ContextSensitiveInteractionMod
         Camera mainCamera;
         int playerLayerMask = 0;
         PlayerActivate playerActivate;
+        PlayerSpeedChanger playerSpeedChanger;
 
         const float RayDistance = 3072 * MeshReader.GlobalScale;
 
@@ -34,14 +36,11 @@ namespace ContextSensitiveInteractionMod
             mainCamera = GameManager.Instance.MainCamera;
             playerLayerMask = ~(1 << LayerMask.NameToLayer("Player"));
             playerActivate = GameManager.Instance.PlayerActivate;
+            playerSpeedChanger = GameManager.Instance.SpeedChanger;
         }
 
         void Update()
         {
-            //if no camera, skip
-            if (mainCamera == null) return;
-
-            //update mode
             //playerActivate.ChangeInteractionMode(GetMode());
             playerActivate.GetType().GetField("currentMode", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(playerActivate, GetMode());
         }
@@ -86,7 +85,7 @@ namespace ContextSensitiveInteractionMod
                     hit.transform.GetComponent<DaggerfallEnemy>())
                 {
                     //if mobile npc/enemy
-                    return InputManager.Instance.HasAction(InputManager.Actions.Sneak) ?
+                    return playerSpeedChanger.isSneaking ?
                         PlayerActivateModes.Steal :
                         PlayerActivateModes.Talk;
                 }
@@ -105,10 +104,12 @@ namespace ContextSensitiveInteractionMod
 
                 Transform doorOwner;
                 DaggerfallStaticDoors doors = playerActivate.GetDoors(hit.transform, out doorOwner);
-                if (doors)   //if (doors && playerEnterExit)
+                StaticDoor door;
+                if (doors &&
+                    (CustomDoor.HasHit(hit, out door) || (doors && doors.HasHit(hit.point, out door))))
                 {
                     //if door
-                    return InputManager.Instance.HasAction(InputManager.Actions.Sneak) ?
+                    return playerSpeedChanger.isSneaking ?
                         PlayerActivateModes.Steal :
                         PlayerActivateModes.Grab;
                 }
@@ -125,6 +126,13 @@ namespace ContextSensitiveInteractionMod
 
             //grab as default
             return PlayerActivateModes.Grab;
+        }
+
+        private bool ActionDoorCheck(RaycastHit hitInfo, out DaggerfallActionDoor door)
+        {
+            door = hitInfo.transform.GetComponent<DaggerfallActionDoor>();
+
+            return door != null;
         }
     }
 }
